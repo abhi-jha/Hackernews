@@ -10,14 +10,12 @@ sudo pip3 install peewee
 #Execute the script:
 #python3 hacknernews.py
 
-#After execution:
+#After execution, make sure the initial schema exists for the data to be imported/exported:
 
 #Export:
 
-mysqldump -u root -proot hn > db_backup.sql
+mysqldump -u username -ppassword hn > db_backup.sql
 
 #Import:
 
-#Create the 'hn' database
-
-#mysqldump -u root -proot hn < db_backup.sql
+#mysql -u username -ppassword hn < db_backup.sql
