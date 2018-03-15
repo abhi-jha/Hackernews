@@ -68,10 +68,17 @@ def get_stories():
             continue
         logger.info(i)
         try:
-            record = DATA(id = r['id'], by = r['by'], score = r['score'], 
+            if(r['type'] == 'story'):
+                if('url' in r.keys()):
+                    record = DATA(id = r['id'], by = r['by'], score = r['score'], 
                           time = datetime.fromtimestamp(r['time']), title = r['title'],
                           type = r['type'], url = r['url'])
-            record.save(force_insert = True)
+                    record.save(force_insert = True)
+                else:
+                    record = DATA(id = r['id'], by = r['by'], score = r['score'], 
+                          time = datetime.fromtimestamp(r['time']), title = r['title'],
+                          type = r['type'], url = None)
+                    record.save(force_insert = True)
         except Exception as e:
             #logger.info(e)
             continue
