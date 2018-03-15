@@ -46,7 +46,6 @@ def get_stories():
     db_max_val = db_max_val[0]
     #last_max = db_max_val
     current_online_max = requests.get('https://hacker-news.firebaseio.com/v0/maxitem.json').json()
-
     if int(db_max_val) == int(current_online_max):
         return
 
@@ -97,8 +96,13 @@ def update_votes_and_titles_of_existing_records():
             logger.info('Story deleted for : '+str(i))
             continue
         try:
-            record = DATA(id = r['id'], score = r['score'], title = r['title'], url = r['url'])
-            record.save()
+            if(r['type']==story):
+                if('url' in r.keys()):
+                    record = DATA(id = r['id'], score = r['score'], title = r['title'], url = r['url'])
+                    record.save()
+                else:
+                    record = DATA(id = r['id'], score = r['score'], title = r['title'], url = None)
+                    record.save()
             logger.info('updated '+str(i[0]))
         except:
             logger.info('story/user deleted')
