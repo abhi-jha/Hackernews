@@ -96,7 +96,7 @@ def update_votes_and_titles_of_existing_records():
             logger.info('Story deleted for : '+str(i))
             continue
         try:
-            if(r['type']==story):
+            if(r['type']=='story'):
                 if('url' in r.keys()):
                     record = DATA(id = r['id'], score = r['score'], title = r['title'], url = r['url'])
                     record.save()
