@@ -12,7 +12,7 @@ import requests
 import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-fh = logging.FileHandler('hackernews.log')
+fh = logging.FileHandler('backwards.log')
 fh.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 fh.setFormatter(formatter)
@@ -46,16 +46,18 @@ def get_stories():
     db_max_val = db_max_val[0]
     #last_max = db_max_val
     current_online_max = requests.get('https://hacker-news.firebaseio.com/v0/maxitem.json').json()
+    current_online_max = db_max_val
+    db_max_val = 0
     if int(db_max_val) == int(current_online_max):
         return
 
-    db.execute_sql('UPDATE MAX SET alive = 0;')
+    #db.execute_sql('UPDATE MAX SET alive = 0;')
     
     logger.info('current_online_max : '+str(current_online_max))
     logger.info('db_max_val : '+str(db_max_val))
     logger.info('Number of records to be fetched : '+str(current_online_max - db_max_val + 1))
-    record = MAX(max_val = int(current_online_max), alive = 1)
-    record.save()
+    #record = MAX(max_val = int(current_online_max), alive = 1)
+    #record.save()
     for i in range(current_online_max,db_max_val-1, -1): 
         base = 'https://hacker-news.firebaseio.com/v0/item/'+str(i)+'.json'
         r = ''
@@ -79,7 +81,7 @@ def get_stories():
                           type = r['type'], url = None)
                     record.save(force_insert = True)
         except Exception as e:
-            #logger.info(e)
+            logger.info(e)
             continue
 def update_votes_and_titles_of_existing_records():
     #cursor = db.execute_sql('select id from DATA ORDER BY time')
@@ -111,8 +113,8 @@ def start_running():
     while True:
         logger.info('Getting stories')
         get_stories()
-        time.sleep(60*60*5) #sleep for five hours
-        logger.info('updating')
-        update_votes_and_titles_of_existing_records()
+        #time.sleep(60*60*5) #sleep for five hours
+        #logger.info('updating')
+        #update_votes_and_titles_of_existing_records()
 if __name__ == '__main__':
     start_running()
