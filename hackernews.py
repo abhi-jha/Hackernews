@@ -18,7 +18,7 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 fh.setFormatter(formatter)
 logger.addHandler(fh)
 
-db = MySQLDatabase('hn', user='root', passwd='root')
+db = MySQLDatabase('hn', user='root', passwd='')
 last_max = ''
 class DATA(peewee.Model):
     id = peewee.IntegerField()
